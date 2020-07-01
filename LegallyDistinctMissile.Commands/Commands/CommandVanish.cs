@@ -3,6 +3,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using LegallyDistinctMissile.Commands.Events;
 using Microsoft.Extensions.Localization;
 using OpenMod.API.Eventing;
 using OpenMod.API.Permissions;
@@ -11,11 +13,10 @@ using OpenMod.API.Users;
 using OpenMod.Core.Commands;
 using OpenMod.Core.Users;
 using OpenMod.Unturned.Users;
-using RG.LegallyDistinctMissile.Commands.Events;
 
 #endregion
 
-namespace RG.LegallyDistinctMissile.Commands.Commands
+namespace LegallyDistinctMissile.Commands.Commands
 {
     [Command("vanish", Priority = Priority.Normal)]
     [CommandDescription("Like a ghost")]
@@ -75,7 +76,7 @@ namespace RG.LegallyDistinctMissile.Commands.Commands
             // ReSharper disable once PossibleNullReferenceException
             var ldmComponent = m_Plugin.GetLdmComponent(targetData.SteamId);
             if (ldmComponent == null)
-                throw new UserFriendlyException(m_StringLocalizer["ldm_cmds:fail:invalid_user"]);
+                throw new UserFriendlyException(m_StringLocalizer["ldm_cmds:fail:invalid_user", targetData.DisplayName]);
 
             string message;
             if (ldmComponent.IsVanishModeActive)
@@ -87,6 +88,7 @@ namespace RG.LegallyDistinctMissile.Commands.Commands
             }
             else
             {
+                await UniTask.SwitchToMainThread();
                 ldmComponent.DesactivateVanishMode();
                 message = other
                     ? m_StringLocalizer["ldm_cmds:success:vanish_other_disabled",

@@ -3,6 +3,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using LegallyDistinctMissile.Commands.Events;
 using Microsoft.Extensions.Localization;
 using OpenMod.API.Eventing;
 using OpenMod.API.Permissions;
@@ -11,11 +13,10 @@ using OpenMod.API.Users;
 using OpenMod.Core.Commands;
 using OpenMod.Core.Users;
 using OpenMod.Unturned.Users;
-using RG.LegallyDistinctMissile.Commands.Events;
 
 #endregion
 
-namespace RG.LegallyDistinctMissile.Commands.Commands
+namespace LegallyDistinctMissile.Commands.Commands
 {
     [Command("god", Priority = Priority.Normal)]
     [CommandDescription("Feel the power")]
@@ -75,11 +76,12 @@ namespace RG.LegallyDistinctMissile.Commands.Commands
             // ReSharper disable once PossibleNullReferenceException
             var ldmComponent = m_Plugin.GetLdmComponent(targetData.SteamId);
             if (ldmComponent == null)
-                throw new UserFriendlyException(m_StringLocalizer["ldm_cmds:fail:invalid_user"]);
+                throw new UserFriendlyException(m_StringLocalizer["ldm_cmds:fail:invalid_user", targetData.DisplayName]);
 
             string message;
             if (ldmComponent.IsGodModeActive)
             {
+                await UniTask.SwitchToMainThread();
                 ldmComponent.ActivateGodMode();
                 message = other
                     ? m_StringLocalizer["ldm_cmds:success:god_other_enabled", targetData.DisplayName]

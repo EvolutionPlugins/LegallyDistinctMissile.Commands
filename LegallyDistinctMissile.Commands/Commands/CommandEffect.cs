@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using OpenMod.API.Prioritization;
 using OpenMod.Core.Commands;
@@ -14,7 +15,7 @@ using Command = OpenMod.Core.Commands.Command;
 
 #endregion
 
-namespace RG.LegallyDistinctMissile.Commands.Commands
+namespace LegallyDistinctMissile.Commands.Commands
 {
     [Command("effect", Priority = Priority.Normal)]
     [CommandDescription("Triggers an effect.")]
@@ -56,6 +57,7 @@ namespace RG.LegallyDistinctMissile.Commands.Commands
                 position = unturnedUser.Player.transform.position;
             }
 
+            await UniTask.SwitchToMainThread();
             EffectManager.sendEffect(effectId, actorId, position);
             await PrintAsync(m_StringLocalizer["ldm_cmds:success:effect_triggered", effectId]);
         }

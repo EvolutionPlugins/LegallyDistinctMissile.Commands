@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using OpenMod.API.Prioritization;
 using OpenMod.Core.Commands;
@@ -11,7 +12,7 @@ using Command = OpenMod.Core.Commands.Command;
 
 #endregion
 
-namespace RG.LegallyDistinctMissile.Commands.Commands
+namespace LegallyDistinctMissile.Commands.Commands
 {
     [Command("exit", Priority = Priority.Normal)]
     [CommandActor(typeof(UnturnedUser))]
@@ -25,11 +26,11 @@ namespace RG.LegallyDistinctMissile.Commands.Commands
             m_StringLocalizer = stringLocalizer;
         }
 
-        protected override Task OnExecuteAsync()
+        protected override async Task OnExecuteAsync()
         {
             var unturnedUser = (UnturnedUser) Context.Actor;
+            await UniTask.SwitchToMainThread();
             Provider.kick(unturnedUser.SteamId, m_StringLocalizer["ldm_cmds:success:exit"]);
-            return Task.CompletedTask;
         }
     }
 }

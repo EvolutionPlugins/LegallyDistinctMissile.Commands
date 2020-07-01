@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using OpenMod.API.Permissions;
 using OpenMod.API.Prioritization;
@@ -13,7 +14,7 @@ using OpenMod.Unturned.Users;
 
 #endregion
 
-namespace RG.LegallyDistinctMissile.Commands.Commands
+namespace LegallyDistinctMissile.Commands.Commands
 {
     [Command("heal", Priority = Priority.Normal)]
     [CommandDescription("Heals the target user")]
@@ -66,11 +67,11 @@ namespace RG.LegallyDistinctMissile.Commands.Commands
                 targetData = Context.Actor as UnturnedUser;
 
             // ReSharper disable PossibleNullReferenceException
+            await UniTask.SwitchToMainThread();
             targetData.Player.life.askHeal(100, true, true);
             targetData.Player.life.askDisinfect(100);
             targetData.Player.life.askDrink(100);
             targetData.Player.life.askEat(100);
-            targetData.Player.life.askRest(100);
             // ReSharper restore PossibleNullReferenceException
 
             var message = other

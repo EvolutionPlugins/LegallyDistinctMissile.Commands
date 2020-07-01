@@ -5,7 +5,7 @@ using OpenMod.Unturned.Users;
 
 #endregion
 
-namespace RG.LegallyDistinctMissile.Commands.Events
+namespace LegallyDistinctMissile.Commands.Events
 {
     public abstract class ChangeModeEvent : Event
     {

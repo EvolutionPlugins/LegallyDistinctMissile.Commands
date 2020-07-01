@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using OpenMod.API.Prioritization;
 using OpenMod.Core.Commands;
@@ -11,7 +12,7 @@ using Command = OpenMod.Core.Commands.Command;
 
 #endregion
 
-namespace RG.LegallyDistinctMissile.Commands.Commands
+namespace LegallyDistinctMissile.Commands.Commands
 {
     [Command("heal", Priority = Priority.Normal)]
     [CommandActor(typeof(UnturnedUser))]
@@ -38,6 +39,7 @@ namespace RG.LegallyDistinctMissile.Commands.Commands
             if (equipmentI.itemID == 0)
                 throw new UserFriendlyException(m_StringLocalizer["ldm_cmds:fail:not_equipped"]);
 
+            await UniTask.SwitchToMainThread();
             ItemTool.tryForceGiveItem(unturnedUser.Player, equipmentI.itemID, amount);
             await PrintAsync(m_StringLocalizer["ldm_cmds:success:more", amount, equipmentI.asset.itemName]);
         }
