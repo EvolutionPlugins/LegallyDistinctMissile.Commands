@@ -9,6 +9,7 @@ using OpenMod.Core.Plugins;
 using OpenMod.Core.Users;
 using OpenMod.Unturned.Plugins;
 using OpenMod.Unturned.Users;
+using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -37,6 +38,8 @@ namespace LegallyDistinctMissile.Commands
 
         protected override async UniTask OnLoadAsync()
         {
+            Provider.onEnemyConnected += OnConnected;
+            Provider.onEnemyDisconnected += OnDisconnected;
             foreach (var player in await m_UnturnedUserProvider.GetUsersAsync(KnownActorTypes.Player))
             {
                 if (!(player is UnturnedUser unturnedUser) || unturnedUser.Player == null)
@@ -50,6 +53,8 @@ namespace LegallyDistinctMissile.Commands
 
         protected override async UniTask OnUnloadAsync()
         {
+            Provider.onEnemyDisconnected -= OnDisconnected;
+            Provider.onEnemyConnected -= OnConnected;
             foreach (var player in await m_UnturnedUserProvider.GetUsersAsync(KnownActorTypes.Player))
             {
                 if (!(player is UnturnedUser unturnedUser) || unturnedUser.Player == null)
@@ -62,6 +67,23 @@ namespace LegallyDistinctMissile.Commands
             }
 
             LdmComponents.Clear();
+        }
+
+        private void OnConnected(SteamPlayer steamPlayer)
+        {
+            var playerId = steamPlayer.playerID.steamID;
+            if (LdmComponents.ContainsKey(playerId))
+                return;
+
+
+            var go = steamPlayer.player.gameObject;
+            var ldmComponent = go.getOrAddComponent<LdmComponent>();
+            LdmComponents[playerId] = ldmComponent;
+        }
+
+        private void OnDisconnected(SteamPlayer steamPlayer)
+        {
+            LdmComponents.Remove(steamPlayer.playerID.steamID);
         }
 
         public LdmComponent GetLdmComponent(CSteamID steamId)

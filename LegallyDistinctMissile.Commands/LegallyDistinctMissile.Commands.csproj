@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net461</TargetFrameworks>
+		<TargetFramework>net461</TargetFramework>
 	</PropertyGroup>
 
 	<Import Project="Plugin.props" />
@@ -10,9 +10,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="OpenMod.API" Version="0.9.43" />
-	  <PackageReference Include="OpenMod.Core" Version="0.9.43" />
-	  <PackageReference Include="OpenMod.Unturned" Version="0.9.43" />
+	  <PackageReference Include="OpenMod.API" Version="0.9.46" />
+	  <PackageReference Include="OpenMod.Core" Version="0.9.46" />
+	  <PackageReference Include="OpenMod.Unturned" Version="0.9.46" />
 	  <PackageReference Include="OpenMod.Unturned.Redist" Version="3.20.5.6" />
 	</ItemGroup>
 </Project>

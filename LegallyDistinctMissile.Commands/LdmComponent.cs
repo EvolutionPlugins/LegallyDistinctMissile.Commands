@@ -5,7 +5,7 @@ using UnityEngine;
 
 #endregion
 
-namespace RG.LegallyDistinctMissile.Commands
+namespace LegallyDistinctMissile.Commands
 {
     public class LdmComponent : MonoBehaviour
     {
@@ -37,14 +37,12 @@ namespace RG.LegallyDistinctMissile.Commands
             m_Player.life.askDisinfect(100);
             m_Player.life.askDrink(100);
             m_Player.life.askEat(100);
-            m_Player.life.askRest(100);
 
             m_Player.life.onBleedingUpdated += OnBleeding;
             m_Player.life.onBrokenUpdated += OnBroken;
             m_Player.life.onFoodUpdated += OnFood;
             m_Player.life.onHealthUpdated += OnHealth;
             m_Player.life.onOxygenUpdated += OnOxygen;
-            m_Player.life.onStaminaUpdated += OnStamina;
             m_Player.life.onVirusUpdated += OnVirus;
             m_Player.life.onWaterUpdated += OnWater;
 
@@ -70,7 +68,6 @@ namespace RG.LegallyDistinctMissile.Commands
             m_Player.life.onFoodUpdated -= OnFood;
             m_Player.life.onHealthUpdated -= OnHealth;
             m_Player.life.onOxygenUpdated -= OnOxygen;
-            m_Player.life.onStaminaUpdated -= OnStamina;
             m_Player.life.onVirusUpdated -= OnVirus;
             m_Player.life.onWaterUpdated -= OnWater;
 
@@ -128,14 +125,6 @@ namespace RG.LegallyDistinctMissile.Commands
                 return;
 
             m_Player.life.simulatedModifyOxygen(100);
-        }
-
-        private void OnStamina(byte newStamina)
-        {
-            if (newStamina > 10)
-                return;
-
-            m_Player.life.serverModifyStamina(100);
         }
 
         private void OnVirus(byte newVirus)
